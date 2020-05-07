@@ -25,10 +25,16 @@ after_initialize do
       require_path 'concerns/relationship'
 
       require_path 'models/base'
+      require_path 'models/category_user'
+      require_path 'models/category'
+      require_path 'models/group_user'
+      require_path 'models/group'
       require_path 'models/post'
       require_path 'models/tag'
-      require_path 'models/topic'
+      require_path 'models/topic_group'
       require_path 'models/topic_tag'
+      require_path 'models/topic_user'
+      require_path 'models/topic'
       require_path 'models/user'
 
       require_path 'controllers/base_controller'

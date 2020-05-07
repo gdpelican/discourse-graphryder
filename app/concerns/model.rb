@@ -2,6 +2,7 @@ module Graphryder
   module Model
     def create(models)
       nodes = Array(models).map(&method(:node_for))
+      binding.pry if graph_name == 'topic'
       query("CREATE #{nodes.join(',')}")
     end
 

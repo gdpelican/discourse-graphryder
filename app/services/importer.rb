@@ -1,25 +1,25 @@
 module Graphryder
   class Importer
     def self.import!
-      users = ::User.all
-      puts "Importing #{users.count} users..."
-      Graphryder::User.instance.create(users)
+      import_class(::User)
+      import_class(::Group)
+      import_class(::Category)
+      import_class(::Tag)
+      import_class(::Topic) { |klass| klass.includes(:first_post) }
+      import_class(::Post) { |klass| klass.where.not(post_number: 1) }
 
-      tags = ::Tag.all
-      puts "Importing #{tags.count} tags..."
-      Graphryder::Tag.instance.create(tags)
+      import_class(::TopicGroup)
+      import_class(::TopicTag)
+      import_class(::TopicUser)
 
-      topics = ::Topic.includes(:first_post)
-      puts "Importing #{topics.count} topics..."
-      Graphryder::Topic.instance.create(topics)
+      import_class(::GroupUser)
+      import_class(::CategoryUser)
+    end
 
-      topic_tags = ::TopicTag.all
-      puts "Importing #{topic_tags} topic tags..."
-      Graphryder::TopicTag.instance.create(topic_tags)
-
-      posts = ::Post.where.not(post_number: 1)
-      puts "Importing #{posts.count} posts..."
-      Graphryder::Post.instance.create(posts)
+    def self.import_class(klass)
+      models = block_given? ? yield(klass) : klass.all
+      puts "Importing #{models.count} #{klass.to_s.pluralize}..."
+      "Graphryder::#{klass}".constantize.instance.create(models)
     end
   end
 end

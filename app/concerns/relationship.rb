@@ -1,12 +1,14 @@
 module Graphryder
   module Relationship
-    def create(model)
-      create_relationship(
-        source: source_for(model),
-        target: target_for(model),
-        name: relationship_name,
-        direction: direction
-      )
+    def create(models)
+      models.each do |model|
+        create_relationship(
+          source: source_for(model),
+          target: target_for(model),
+          name: relationship_name,
+          direction: direction
+        )
+      end
     end
 
     def source_for(model)

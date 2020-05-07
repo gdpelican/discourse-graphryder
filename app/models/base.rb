@@ -13,6 +13,8 @@ module Graphryder
     end
 
     def create_relationship(source:, target:, name:, direction: :parent)
+      return unless source && target
+
       alias_name = target.class.to_s.downcase
       relation = case direction
       when :parent then "-[:#{name}]->"

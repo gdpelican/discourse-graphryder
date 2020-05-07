@@ -1,7 +1,23 @@
 module Graphryder
   class Post < Base
-    prepend Graphryder::HasAuthor
     include Graphryder::Model
+
+    def create(posts)
+      super(posts)
+
+      posts.each do |post|
+        create_relationship(
+          source: post,
+          target: post.topic,
+          name: :content_of
+        )
+        create_relationship(
+          source: post,
+          target: post.user,
+          name: :authored_by
+        )
+      end
+    end
 
     private
 
