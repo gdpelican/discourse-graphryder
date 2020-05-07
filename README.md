@@ -23,7 +23,9 @@ Currently, a built binary of the RedisGraph module (version [2.0.11-rc1](https:/
 ### Usage
 
 (TODO: document functionality given in `app/models/base`)
+
 (TODO: document functionality of `app/concerns/model` concern)
+
 (TODO: document functionality of `app/concerns/relationship` concern)
 
 ### API
