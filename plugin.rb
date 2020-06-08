@@ -26,7 +26,10 @@ after_initialize do
       require_path 'services/importer'
       require_path 'services/updater'
 
+      Graphryder::Importer.import! if ENV['GRAPHRYDER_IMPORT']
       Graphryder::Updater.initialize!
+
+      routes.draw { post "query" => "base#query", format: :json }
     end
   end
 

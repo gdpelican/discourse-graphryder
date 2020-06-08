@@ -1,22 +1,9 @@
 module Graphryder
-  class BaseController < ApplicationController
+  class BaseController < ActionController::Base
+    protect_from_forgery with: :null_session
 
-    def show
-      render json: { model.graph_name => model.fetch(id) }
-    end
-
-    def count
-      render json: { count: model.count }
-    end
-
-    def count_by_author
-      render json: { count: model.count_by_author }
-    end
-
-    private
-
-    def model
-      "::Graphryder::#{controller_name.demodulize.singularize.humanize}".constantize.instance
+    def query
+      render json: Graphryder::Query.instance.perform(params[:query])
     end
   end
 end
