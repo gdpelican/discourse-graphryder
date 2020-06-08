@@ -10,25 +10,7 @@ module Graphryder
       )
     end
 
-    def create(models)
-      nodes = Array(models).map(&method(:node_for))
-      query("CREATE #{nodes.join(',')}")
-    end
-
     private
-
-    def node_for(model)
-      node = serialize(model).to_a.map { |k,v| "#{k}: '#{v}'" }.join(', ')
-      "(:#{graph_name_for(model)} {#{node}})"
-    end
-
-    def serialize(model)
-      model.as_json
-    end
-
-    def graph_name_for(model)
-      model.class.to_s.demodulize.downcase
-    end
 
     def deserialize(nodes)
       nodes.second
