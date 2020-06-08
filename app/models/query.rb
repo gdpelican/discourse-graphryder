@@ -3,7 +3,11 @@ module Graphryder
     include Singleton
 
     def perform(query)
-      deserialize Discourse.redis.call('GRAPH.QUERY', :graphryder, query)
+      deserialize Discourse.redis.call(
+        'GRAPH.QUERY',
+        :graphryder,
+        query.gsub("\n", '').squeeze(' ')
+      )
     end
 
     def create(models)
@@ -15,11 +19,15 @@ module Graphryder
 
     def node_for(model)
       node = serialize(model).to_a.map { |k,v| "#{k}: '#{v}'" }.join(', ')
-      "(:#{model.class.to_s.demodulize.downcase} {#{node}})"
+      "(:#{graph_name_for(model)} {#{node}})"
     end
 
     def serialize(model)
       model.as_json
+    end
+
+    def graph_name_for(model)
+      model.class.to_s.demodulize.downcase
     end
 
     def deserialize(nodes)

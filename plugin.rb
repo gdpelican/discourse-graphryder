@@ -21,29 +21,12 @@ after_initialize do
         "#{path}/discourse-graphryder/redisgraph.so"
       ) unless Discourse.redis.call('module', 'list').find { |_, name, _, _| name == 'graph' }
 
-      require_path 'concerns/model'
-      require_path 'concerns/relationship'
-
-      require_path 'models/base'
-      require_path 'models/category_user'
-      require_path 'models/category'
-      require_path 'models/group_user'
-      require_path 'models/group'
-      require_path 'models/post'
-      require_path 'models/tag'
-      require_path 'models/topic_group'
-      require_path 'models/topic_tag'
-      require_path 'models/topic_user'
-      require_path 'models/topic'
-      require_path 'models/user'
-
+      require_path 'models/query'
       require_path 'controllers/base_controller'
-      require_path 'controllers/posts_controller'
-      require_path 'controllers/tags_controller'
-      require_path 'controllers/topics_controller'
-      require_path 'controllers/users_controller'
-
       require_path 'services/importer'
+      require_path 'services/updater'
+
+      Graphryder::Updater.initialize!
     end
   end
 
