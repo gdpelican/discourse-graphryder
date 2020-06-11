@@ -1,11 +1,10 @@
 module Graphryder
   class Importer
-    def self.import!
-      Updater.initialize!
-
+    def self.initialize!
       import_class(::User)
       import_class(::Tag)
       import_class(::Post)
+      import_class(::Topic)
       import_class(::AnnotationStore::Annotation) if Object.const_defined?("AnnotationStore::Annotation")
     end
 

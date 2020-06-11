@@ -63,7 +63,7 @@ module Graphryder
             MERGE (post)-[:replies]->(topic)
             #{"
               MERGE (parent:post {label:#{graphryder_parent_label}})
-              MERGE (post)-[:replies]->parent
+              MERGE (post)-[:replies]->(parent)
             " if graphryder_parent_label}
             RETURN post
           "

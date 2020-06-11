@@ -14,20 +14,11 @@ after_initialize do
         require Rails.root.join('plugins', 'discourse-graphryder', 'app', path).to_s
       end
 
-      path = File.expand_path File.dirname(__dir__)
-      Discourse.redis.call(
-        'module',
-        'load',
-        "#{path}/discourse-graphryder/redisgraph.so"
-      ) unless Discourse.redis.call('module', 'list').find { |_, name, _, _| name == 'graph' }
-
       require_path 'models/query'
       require_path 'controllers/base_controller'
       require_path 'services/importer'
+      require_path 'services/initializer'
       require_path 'services/updater'
-
-      Graphryder::Importer.import! if ENV['GRAPHRYDER_IMPORT']
-      Graphryder::Updater.initialize!
 
       routes.draw { post "query" => "base#query", format: :json }
     end
@@ -36,4 +27,6 @@ after_initialize do
   Discourse::Application.routes.append do
     mount ::Graphryder::Engine, at: '/graphryder', as: :graphryder
   end
+
+  Graphryder::Initializer.initialize!
 end
