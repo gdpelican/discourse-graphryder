@@ -33,7 +33,7 @@ module Graphryder
                 topic.timestamp = '#{updated_at}',
                 topic.url = '#{url}'
             MERGE (user:user {id:#{user_id}})
-            MERGE (user)-[:authors]->(topic)
+            MERGE (user)-[:AUTHORSHIP]->(topic)
             RETURN topic
           "
         end
@@ -59,11 +59,11 @@ module Graphryder
                 post.url = '#{url}'
             MERGE (user:user {id:#{user_id}})
             MERGE (topic:topic {id:#{topic_id}})
-            MERGE (user)-[:authors]->(post)
-            MERGE (post)-[:replies]->(topic)
+            MERGE (user)-[:AUTHORSHIP]->(post)
+            MERGE (post)-[:COMMENTS]->(topic)
             #{"
               MERGE (parent:post {label:#{graphryder_parent_label}})
-              MERGE (post)-[:replies]->(parent)
+              MERGE (post)-[:COMMENTS]->(parent)
             " if graphryder_parent_label}
             RETURN post
           "
@@ -79,6 +79,11 @@ module Graphryder
             SET tag.label = '#{name.downcase}',
                 tag.timestamp = '#{updated_at}',
                 tag.url = '#{full_url}'
+            #{"
+              MERGE (target:tag {id:#{target_tag_id}})
+              MERGE (target)-[:IS_CHILD]->(tag)
+            " if target_tag_id}
+
             RETURN tag
           "
         end
@@ -94,18 +99,18 @@ module Graphryder
                 annotation.quote = '#{quote}',
                 annotation.timestamp = '#{updated_at}'
             MERGE (user:user {id:#{creator_id}})
-            MERGE (user)-[:authors]->(annotation)
+            MERGE (user)-[:AUTHORSHIP]->(annotation)
             #{"
               MERGE (tag:tag {id:#{tag_id}})
-              MERGE (annotation)-[:refers_to]->(tag)
+              MERGE (annotation)-[:REFERS_TO]->(tag)
             " if tag_id}
             #{"
               MERGE (post:post {label:#{graphryder_parent_label}})
-              MERGE (annotation)-[:annotates]->(post)
+              MERGE (annotation)-[:ANNOTATES]->(post)
             " if post_id}
             #{"
               MERGE (topic:topic {id:#{topic_id}})
-              MERGE (annotation)-[:annotates]->(topic)
+              MERGE (annotation)-[:ANNOTATES]->(topic)
             " if topic_id}
             RETURN annotation
           "
