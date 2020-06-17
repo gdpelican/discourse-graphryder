@@ -6,6 +6,12 @@ It uses the existing redis installation baked into Discourse into order to const
 
 Currently, a built binary of the RedisGraph module (version [2.0.11-rc1](https://github.com/RedisGraph/RedisGraph/releases/tag/2.0.11-rc1)) is included with this plugin, and installed on Discourse startup, which allows storing nodes and edges within Redis.
 
+### Installation
+
+Instructions for installing Discourse plugins [can be found here](https://meta.discourse.org/t/install-plugins-in-discourse/19157).
+
+Take note that the first time this plugin is installed, it will install the [RedisGraph module](https://oss.redislabs.com/redisgraph/#loading-redisgraph-into-redis) onto Discourse's Redis instance. Subsequent deploys will not perform this step.
+
 ### API
 
 This plugin exposes a single endpoint,
