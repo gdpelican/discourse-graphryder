@@ -20,10 +20,16 @@ module Graphryder
 
     def deserialize(nodes)
       nodes.first.each_with_index.reduce({}) do |result, (key, index)|
-        result.merge key => nodes.second
-          .map { |v| v[index] }
-          .map { |record| record.respond_to?(:to_h) ? record.to_h['properties'].to_h : record }
-      end if nodes.length > 1
+        result.merge(key => value_for(nodes.second.map { |v| v[index] }))
+      end
+    end
+
+    def value_for(node)
+      if node.all? { |record| record.respond_to?(:to_h) }
+        node.map { |record| record.to_h['properties'].to_h }
+      else
+        node.first
+      end
     end
   end
 end
