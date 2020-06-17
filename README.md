@@ -4,32 +4,31 @@ This is a plugin designed to install and use [RedisGraph](https://oss.redislabs.
 
 It uses the existing redis installation baked into Discourse into order to construct a graph of relationships between nodes.
 
-Current relationships:
-
-- `(topic)-[:authored_by]->(user)`
-- `(topic)-[:tagged_with]->(tag)`
-- `(topic)-[:member_of]->(group)`
-- `(topic)-[:member_of]->(category)`
-
-- `(post)-[:authored_by]->(user)`
-- `(post)-[:content_of]->(topic)`
-
-- `(user)-[:member_of]->(group)`
-- `(user)-[:member_of]->(category)`
-- `(user)-[:member_of]->(topic)`
-
 Currently, a built binary of the RedisGraph module (version [2.0.11-rc1](https://github.com/RedisGraph/RedisGraph/releases/tag/2.0.11-rc1)) is included with this plugin, and installed on Discourse startup, which allows storing nodes and edges within Redis.
-
-### Usage
-
-(TODO: document functionality given in `app/models/base`)
-
-(TODO: document functionality of `app/concerns/model` concern)
-
-(TODO: document functionality of `app/concerns/relationship` concern)
 
 ### API
 
-This plugin also exposes an API to serialize graph data for consumption by various graphing clients. It is designed to produce data in a format similar to that laid out in the [Existing graphryder API](https://github.com/edgeryders/graphryder-api)
+This plugin exposes a single endpoint,
+```
+/graphryder/query
+```
+which accepts a [RedisGraph query](https://oss.redislabs.com/redisgraph/commands/), and responds with
 
-(TODO: document endpoints / data format)
+It will return a hash with keys, one for each `RETURN` value in the query. For instance, the following query:
+
+```js
+{
+  "query": "MATCH (post:post) RETURN post, count(*) as count"
+}
+```
+would return JSON as follows:
+```js
+{
+  "post": [{...}, {...}, {...}, {...}, {...}], // json representations of post data stored in RedisGraph
+  "count": 5 // Number of records returned
+}
+```
+
+In order to use this endpoint, a user must either be authenticated as an admin (using a generated Admin API key), or a member of a group named `annotators`
+
+At the time of this writing, the intended consumer of this API is the [Existing graphryder API](https://github.com/edgeryders/graphryder-api)
