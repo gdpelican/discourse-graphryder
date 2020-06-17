@@ -10,6 +10,14 @@ after_initialize do
       engine_name 'graphryder'
       isolate_namespace Graphryder
 
+      path = File.expand_path File.dirname(__dir__)
+      Discourse.redis.call(
+        'module',
+        'load',
+        "#{path}/discourse-graphryder/redisgraph.so"
+      ) unless Discourse.redis.call('module', 'list').find { |_, name, _, _| name == 'graph' }
+
+
       def self.require_path(path)
         require Rails.root.join('plugins', 'discourse-graphryder', 'app', path).to_s
       end
