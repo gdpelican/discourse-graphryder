@@ -6,6 +6,10 @@ module Graphryder
       ::User.class_eval do
         after_save :graphryder_sync
 
+        def is_annotator?
+          admin? || groups.find_by(name: :annotator)
+        end
+
         def graphryder_url
           "#{Discourse.base_url}/users/#{username}"
         end
