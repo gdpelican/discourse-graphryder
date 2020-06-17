@@ -5,7 +5,7 @@ module Graphryder
       import_class(::Tag)
       import_class(::Post)
       import_class(::Topic)
-      import_class(::AnnotationStore::Annotation) if Object.const_defined?("AnnotationStore::Annotation")
+      import_class(::AnnotatorStore::Annotation) if Object.const_defined?("AnnotatorStore::Annotation")
     end
 
     def self.import_class(klass)

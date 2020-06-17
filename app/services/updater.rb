@@ -89,7 +89,7 @@ module Graphryder
         end
       end
 
-      ::AnnotationStore::Annotation.class_eval do
+      ::AnnotatorStore::Annotation.class_eval do
         after_save :graphryder_sync
 
         def graphryder_sync
@@ -105,7 +105,7 @@ module Graphryder
               MERGE (annotation)-[:REFERS_TO]->(tag)
             " if tag_id}
             #{"
-              MERGE (post:post {label:#{graphryder_parent_label}})
+              MERGE (post:post {id:#{post_id}})
               MERGE (annotation)-[:ANNOTATES]->(post)
             " if post_id}
             #{"
@@ -115,7 +115,7 @@ module Graphryder
             RETURN annotation
           "
         end
-      end if Object.const_defined?("AnnotationStore::Annotation")
+      end if Object.const_defined?("AnnotatorStore::Annotation")
     end
   end
 end
