@@ -12,6 +12,14 @@ Instructions for installing Discourse plugins [can be found here](https://meta.d
 
 Take note that the first time this plugin is installed, it will install the [RedisGraph module](https://oss.redislabs.com/redisgraph/#loading-redisgraph-into-redis) onto Discourse's Redis instance. Subsequent deploys will not perform this step.
 
+Once the plugin is running, it will begin auto-syncing updates which occur.
+
+Starting the instance with the `GRAPHRYDER_IMPORT` ENV variable set will cause a full import of the existing database from Postgres into RedisGraph.
+
+```bash
+GRAPHRYDER_IMPORT bundle exec rails s
+```
+
 ### API
 
 This plugin exposes a single endpoint,
