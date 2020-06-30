@@ -105,4 +105,4 @@ AnnotatorStore::Annotation
 
 ```
 
-The code which does this can be viewed [in the Updater class](./blob/master/app/services/updater.rb) (the code written there should be considered the source of truth)
+The code which does this can be viewed [in the Updater class](./app/services/updater.rb) (the code written there should be considered the source of truth)
