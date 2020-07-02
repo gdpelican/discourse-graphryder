@@ -117,6 +117,21 @@ module Graphryder
           "
         end
       end if Object.const_defined?("AnnotatorStore::Annotation")
+
+      ::AnnotatorStore::TagName.class_eval do
+        after_save :graphryder_sync
+
+        def graphryder_sync
+          ::Graphryder::Query.instance.perform "
+            MERGE (tagname:tagname {id:#{id}})
+            SET tagname.label = '#{name}',
+                tagname.timestamp = '#{updated_at}'
+            MERGE (tag:tag {id:#{tag_id}})
+            MERGE (tag)-[:NAMED]->(tagname)
+            RETURN tagname
+          "
+        end
+      end
     end
   end
 end

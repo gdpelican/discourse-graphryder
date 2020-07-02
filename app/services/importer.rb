@@ -1,11 +1,12 @@
 module Graphryder
   class Importer
     def self.initialize!
-      import_class("::User")
-      import_class("::Post")
-      import_class("::Topic")
-      import_class("::AnnotatorStore::Tag")
-      import_class("::AnnotatorStore::Annotation")
+      import_class "::User"
+      import_class "::Post"
+      import_class "::Topic"
+      import_class "::AnnotatorStore::Tag"
+      import_class "::AnnotatorStore::TagName"
+      import_class "::AnnotatorStore::Annotation"
     end
 
     def self.import_class(klass_name)
