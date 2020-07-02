@@ -93,6 +93,14 @@ AnnotatorStore::Tag
   relationships:
     AUTHORSHIP (creator)
 
+AnnotatorStore::TagName
+  fields:
+    label (name)
+    timestamp (updated_at)
+
+  relationships:
+    NAMED (tag)
+
 AnnotatorStore::Annotation
   fields:
     label (id)
